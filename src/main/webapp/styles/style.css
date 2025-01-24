@@ -1,0 +1,65 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.hero-section {
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../images/3.jpeg');
+    height: 450px;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+.hero-section h1 {
+    margin-top: 150px;
+    font-size: 3rem;
+}
+.product-card img {
+    height: 200px;
+    object-fit: cover;
+}
+footer {
+    background-color: #343a40;
+    color: white;
+}
+.heroTitle{
+    color: floralwhite;
+    font-weight: bold;
+}
+
+.cart-header {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.product-img {
+    width: 80px;
+    height: auto;
+    border-radius: 8px;
+}
+.checkout-btn {
+    font-size: 1.2rem;
+    padding: 10px;
+}
+.summary-box {
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+.promo-code-toggle {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.product-card img {
+    height: 200px;
+    object-fit: cover;
+}
+.btn-update{
+    color: yellow;
+}
+.btn-delete{
+    background-color: red;
+}
