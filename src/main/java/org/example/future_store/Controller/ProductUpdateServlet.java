@@ -8,19 +8,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet(name = "ProductUpdateServlet", value = "/product-update")
 @MultipartConfig
 public class ProductUpdateServlet extends HttpServlet {
-    String DB_URL = "jdbc:mysql://localhost:3306/ecommerce";
-    String DB_USER = "root";
-    String DB_PASSWORD = "chwmodthejqn009";
+
+    private static final Logger LOGGER = Logger.getLogger(ProductUpdateServlet.class.getName());
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,33 +42,44 @@ public class ProductUpdateServlet extends HttpServlet {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdir();
 
-            filePart.write(uploadPath + File.separator + fileName);
+            try {
+                filePart.write(uploadPath + File.separator + fileName);
+            } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error writing file", e);
+                resp.sendRedirect("product-update.jsp?error=Failed to upload image");
+                return;
+            }
         }
 
         String finalPhoto = (fileName != null) ? fileName : currentPhoto;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            // Look up the DataSource for connection pooling
+            InitialContext ctx = new InitialContext();
+            DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/ecommerceDB");
 
-            String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock = ?, photo = ? WHERE product_id = ?";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1, name);
-            pst.setString(2, description);
-            pst.setDouble(3, Double.parseDouble(price));
-            pst.setInt(4, Integer.parseInt(stock));
-            pst.setString(5, finalPhoto);
-            pst.setInt(6, Integer.parseInt(productId));
+            // Get connection from the pool
+            try (Connection connection = dataSource.getConnection()) {
+                String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock = ?, photo = ? WHERE product_id = ?";
+                try (PreparedStatement pst = connection.prepareStatement(sql)) {
+                    pst.setString(1, name);
+                    pst.setString(2, description);
+                    pst.setDouble(3, Double.parseDouble(price));
+                    pst.setInt(4, Integer.parseInt(stock));
+                    pst.setString(5, finalPhoto);
+                    pst.setInt(6, Integer.parseInt(productId));
 
-            int updatedRowCount = pst.executeUpdate();
+                    int updatedRowCount = pst.executeUpdate();
 
-            if (updatedRowCount > 0) {
-                resp.sendRedirect("product-update.jsp?message=Product updated successfully");
-            } else {
-                resp.sendRedirect("product-update.jsp?error=Product not found");
+                    if (updatedRowCount > 0) {
+                        resp.sendRedirect("product-update.jsp?message=Product updated successfully");
+                    } else {
+                        resp.sendRedirect("product-update.jsp?error=Product not found");
+                    }
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NamingException | SQLException e) {
+            LOGGER.log(Level.SEVERE, "Database error", e);
             resp.sendRedirect("product-update.jsp?error=Failed to update product");
         }
     }

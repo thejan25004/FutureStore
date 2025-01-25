@@ -1,13 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: DELL
-  Date: 1/24/2025
-  Time: 1:25 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page import="org.example.future_store.dao.OrderDAO" %>
-<%@ page import="org.example.future_store.DTO.OrderDTO" %>
-<%@ page import="java.util.List" %>
+<%@ page import="java.sql.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -48,21 +39,52 @@
         </thead>
         <tbody>
         <%
-            OrderDAO orderDAO = new OrderDAO();
-            List<OrderDTO> orders = orderDAO.getAllOrders();
+            // Database connection variables
+            String dbUrl = "jdbc:mysql://localhost:3306/ecommerce";
+            String dbUser = "root";
+            String dbPassword = "chwmodthejqn009";
 
-            for (OrderDTO order : orders) {
+            try {
+                // Load the MySQL driver
+                Class.forName("com.mysql.cj.jdbc.Driver");
+
+                // Connect to the database
+                Connection connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+                // Fetch orders
+                String sql = "SELECT * FROM orders ORDER BY order_date DESC";
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql);
+
+                // Display orders in the table
+                while (resultSet.next()) {
+                    String orderId = resultSet.getString("order_id");
+                    int userId = resultSet.getInt("user_id");
+                    int productId = resultSet.getInt("product_id");
+                    String productName = resultSet.getString("product_name");
+                    double productPrice = resultSet.getDouble("product_price");
+                    int quantity = resultSet.getInt("quantity");
+                    Timestamp orderDate = resultSet.getTimestamp("order_date");
         %>
         <tr>
-            <td><%= order.getOrderId() %></td>
-            <td><%= order.getUserId() %></td>
-            <td><%= order.getProductId() %></td>
-            <td><%= order.getProductName() %></td>
-            <td><%= order.getProductPrice() %></td>
-            <td><%= order.getQuantity() %></td>
-            <td><%= order.getOrderDate() %></td>
+            <td><%= orderId %></td>
+            <td><%= userId %></td>
+            <td><%= productId %></td>
+            <td><%= productName %></td>
+            <td><%= productPrice %></td>
+            <td><%= quantity %></td>
+            <td><%= orderDate %></td>
         </tr>
         <%
+            }
+            connection.close();
+        } catch (Exception e) {
+        %>
+        <tr>
+            <td colspan="7" class="text-danger">Error: <%= e.getMessage() %></td>
+        </tr>
+        <%
+                e.printStackTrace();
             }
         %>
         </tbody>
@@ -72,5 +94,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-

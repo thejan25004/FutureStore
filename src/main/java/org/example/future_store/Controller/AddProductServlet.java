@@ -15,6 +15,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 @WebServlet(name = "AddProductServlet", value = "/product_save")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -22,10 +26,6 @@ import java.sql.SQLException;
         maxRequestSize = 1024 * 1024 * 50   // 50MB
 )
 public class AddProductServlet extends HttpServlet {
-
-    String DB_URL = "jdbc:mysql://localhost:3306/ecommerce";
-    String DB_USER = "root";
-    String DB_PASSWORD = "chwmodthejqn009";
 
     private static final String UPLOAD_DIRECTORY = "product_images";
 
@@ -36,13 +36,13 @@ public class AddProductServlet extends HttpServlet {
         String description = req.getParameter("description");
         String priceStr = req.getParameter("price");
         String stockStr = req.getParameter("stock");
-        String categoryIdStr = req.getParameter("category_id");  // Fetch category ID
+        String categoryIdStr = req.getParameter("category_id");
         Part photoPart = req.getPart("photo");
 
         // Validate and parse inputs
         double price = Double.parseDouble(priceStr);
         int stock = Integer.parseInt(stockStr);
-        int categoryId = Integer.parseInt(categoryIdStr); // Parse category ID
+        int categoryId = Integer.parseInt(categoryIdStr);
 
         // Save uploaded file
         String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
@@ -57,27 +57,30 @@ public class AddProductServlet extends HttpServlet {
             photoPart.write(uploadPath + File.separator + photoFileName);
         }
 
-        // Save product details to the database
+        // Use connection pooling to get a database connection
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            // Look up the DataSource from the JNDI
+            InitialContext ctx = new InitialContext();
+            DataSource dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/ecommerceDB");
 
-            String sql = "INSERT INTO products (name, description, price, stock, photo, category_id) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1, name);
-            pst.setString(2, description);
-            pst.setDouble(3, price);
-            pst.setInt(4, stock);
-            pst.setString(5, photoFileName);
-            pst.setInt(6, categoryId); // Set category ID
+            try (Connection connection = dataSource.getConnection()) {
+                String sql = "INSERT INTO products (name, description, price, stock, photo, category_id) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement pst = connection.prepareStatement(sql);
+                pst.setString(1, name);
+                pst.setString(2, description);
+                pst.setDouble(3, price);
+                pst.setInt(4, stock);
+                pst.setString(5, photoFileName);
+                pst.setInt(6, categoryId);
 
-            int effectedRowCount = pst.executeUpdate();
-            if (effectedRowCount > 0) {
-                resp.sendRedirect("product_save.jsp?message=Product added successfully");
-            } else {
-                resp.sendRedirect("product_save.jsp?error=Failed to add product");
+                int effectedRowCount = pst.executeUpdate();
+                if (effectedRowCount > 0) {
+                    resp.sendRedirect("product_save.jsp?message=Product added successfully");
+                } else {
+                    resp.sendRedirect("product_save.jsp?error=Failed to add product");
+                }
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (NamingException | SQLException e) {
             e.printStackTrace();
             resp.sendRedirect("product_save.jsp?error=Failed to add product");
         }

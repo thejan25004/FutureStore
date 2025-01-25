@@ -37,16 +37,16 @@
     <div class="row">
         <!-- Cart Items -->
         <div class="col-lg-8">
-            <h2 class="cart-header mb-4">Your Cart (3 items)</h2>
+            <h2 class="cart-header mb-4">Your Cart</h2>
             <div class="card mb-3">
                 <div class="row g-0">
                     <div class="col-md-2 d-flex align-items-center">
-                        <img src="images/asus.jpeg" class="product-img mx-auto d-block" alt="Product">
+                        <img src="images/how-to-play-imessage-games.jpg" class="product-img mx-auto d-block" alt="Product">
                     </div>
                     <div class="col-md-7">
                         <div class="card-body">
-                            <h5 class="card-title">Reebok ZPrint Run</h5>
-                            <p class="card-text">Color: Night Beacon / Electric Blue<br>Size: 9 (Women)</p>
+                            <h5 class="card-title">iphone 12 pro</h5>
+                            <p class="card-text"> BrandNew Iphone 12 Pro  With One Year Apple CARE Warrenty</p>
                             <div class="d-flex">
                                 <a href="#" class="me-3 text-danger">Delete</a>
                                 <a href="#" class="me-3">Edit</a>
@@ -55,9 +55,37 @@
                         </div>
                     </div>
                     <div class="col-md-3 text-end d-flex flex-column justify-content-center align-items-end pe-3">
-                        <h6 class="mb-2">$79.99</h6>
+                        <h6 class="mb-2">$250000.00</h6>
                         <input type="number" class="form-control w-50" value="3" min="1">
-                        <h6 class="mt-2">$239.97</h6>
+                        <h6 class="mt-2">$250000.00</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-lg-8">
+            <h2 class="cart-header mb-4">Your Cart</h2>
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-2 d-flex align-items-center">
+                        <img src="images/9d0989e5-3305-4d6a-92ef-aea954e55a5a.9de0baec369ccae30ccf242520d408d7.png" class="product-img mx-auto d-block" alt="Product">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h5 class="card-title">Mag safe Charger</h5>
+                            <p class="card-text"> 4000Wh MagSafe Charger For Iphone</p>
+                            <div class="d-flex">
+                                <a href="#" class="me-3 text-danger">Delete</a>
+                                <a href="#" class="me-3">Edit</a>
+                                <a href="#" class="text-primary">Move to Wishlist</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-end d-flex flex-column justify-content-center align-items-end pe-3">
+                        <h6 class="mb-2">$5000.00</h6>
+                        <input type="number" class="form-control w-50" value="3" min="1">
+                        <h6 class="mt-2">$5000.00</h6>
                     </div>
                 </div>
             </div>
@@ -68,10 +96,10 @@
             <div class="summary-box">
                 <h4 class="mb-3">Order Summary</h4>
                 <p><strong>Free Shipping</strong> on orders over $49</p>
-                <p>Items Subtotal: <span class="float-end">$239.97</span></p>
+                <p>Items Subtotal: <span class="float-end">$3000.00</span></p>
                 <p>Estimated Shipping: <span class="float-end text-success">FREE</span></p>
                 <hr>
-                <h5>Pre-Tax Total: <span class="float-end">$239.97</span></h5>
+                <h5>Pre-Tax Total: <span class="float-end">$3000.00</span></h5>
                 <div class="mt-4">
                     <button class="btn btn-danger w-100 checkout-btn mb-3">Checkout</button>
                     <button class="btn btn-primary w-100 checkout-btn">PayPal Checkout</button>

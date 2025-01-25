@@ -6,15 +6,16 @@ package org.example.future_store.db;
 //import org.hibernate.cfg.Configuration;
 
 public class FactoryConfiguration {
+
 //    private static SessionFactory sessionFactory;
 //
-////    @Resource(name = "jdbc/pool")
-////    private static DataSource dataSource;
+//    @Resource(name = "jdbc/pool")
+//    private static DataSource dataSource;
 //
 //    static {
 //        try {
-////            InitialContext ctx = new InitialContext();
-////            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/pool");
+//            InitialContext ctx = new InitialContext();
+//            dataSource = (DataSource) ctx.lookup("java:/comp/env/jdbc/pool");
 //
 //            Configuration configuration = new Configuration();
 //

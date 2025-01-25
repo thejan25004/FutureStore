@@ -9,13 +9,16 @@
     <style>
         html, body {
             height: 100%;
+
             margin: 0;
             display: flex;
             flex-direction: column;
         }
 
         main {
-            flex: 1; /* Ensures the main content takes up available space */
+            /*flex: 1; !* Ensures the main content takes up available space *!*/
+           background-image: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('images/1.jpeg');
+            /*style="background-image: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/1.jpeg');"*/
         }
 
         footer {
@@ -48,7 +51,7 @@
     </style>
 </head>
 <body>
-<main style="background-image: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/3.jpeg');">
+<main >
     <%
         String message = request.getParameter("message");
         String error = request.getParameter("error");
